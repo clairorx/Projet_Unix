@@ -16,7 +16,7 @@
 #include "SV_sem.h"
 #include <signal.h>
 
-/* fonction pour traiter les signaux de fin et finir de maniï¿½re propre. */
+/* fonction pour traiter les signaux de fin et finir de manière propre. */
 static void end();
 static int PereID,EnregID,RepondID;
 static int Tshmid,Cshmid,Msqid, Semid;
@@ -111,11 +111,11 @@ int main(int argc, char *argv[])	/********** MAIN */
           pause();
 	  /* la voie est maintenant choisie ici. */
 	  Voie = rand()%2;
-	  /* et on fait les opï¿½rations sur le sï¿½maphore de la voie */
+	  /* et on fait les opérations sur le sémaphore de la voie */
 	  P(Semid, Voie);
-	  /* on gï¿½nï¿½re les donnï¿½es */
+	  /* on génére les données */
           GenereData(Tptr, Voie);
-	  /* et on libï¿½re le sï¿½maphore. */
+	  /* et on libère le sémaphore. */
 	  V(Semid, Voie);
           nbdata ++;
           SignaleDonnee(++Voie,Cptr);

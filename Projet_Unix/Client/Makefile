@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -g -Wall -ansi -D _GNU_SOURCE 
 CFLAG2 = -c -Wall -ansi -D _GNU_SOURCE 
-OBJETS = CL_main.o CL_msg.o 
+OBJETS = CL_main.o CL_msg.o CL_connect.o
 
 all: cl CL
 
@@ -14,6 +14,8 @@ cl : $(OBJETS) CL.c
 CL_msg.o : CL_msg.c CL_include CL_msg.h
 	$(CC) $(CFLAG2) CL_msg.c -o CL_msg.o
 
+CL_connect.o : CL_connect.c CL_include CL_connect.h
+	$(CC) $(CFLAG2) CL_connect.c -o CL_connect.o
 clean:
 	@rm -f *~ *.o cl_zz CL
 
