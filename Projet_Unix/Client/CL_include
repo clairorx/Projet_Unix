@@ -4,6 +4,10 @@
 
 #define _POSIX_C_SOURCE 1
 
+/***************************
+** Fichier    CL_include      **
+***************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -18,3 +22,4 @@
 #include <sys/msg.h>
 #include <sys/sem.h>
 #include "CL_def.h"
+#include "CL_msg.h" 

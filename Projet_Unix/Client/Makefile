@@ -3,14 +3,19 @@
 CC = gcc
 CFLAGS = -g -Wall -ansi -D _GNU_SOURCE 
 CFLAG2 = -c -Wall -ansi -D _GNU_SOURCE 
+OBJETS = CL_main.o CL_msg.o 
 
 all: cl CL
 
-cl : CL_main.c
-	$(CC) $(CFLAGS) CL_main.c -o CL
+cl : $(OBJETS) CL.c
+	$(CC) $(CFLAGS) $(OBJETS) -o cl_zz
+	$(CC) $(FLAGS) CL.c -o CL
+
+CL_msg.o : CL_msg.c CL_include CL_msg.h
+	$(CC) $(CFLAG2) CL_msg.c -o CL_msg.o
 
 clean:
-	@rm -f *~ *.o sv_zz SV 
+	@rm -f *~ *.o cl_zz CL
 
 
 
