@@ -37,7 +37,6 @@ if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message 
         printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
 }
 printf("Client:Envoi MESSAGE:%s %ld\n",message.txt,message.type);
-MsgTimout(1);
 message.type = pid;
 if ((erreur=msgrcv(msqid,&message,L_MSG,message.type,0)) <0){ /* Reception d'un message de type PID contenant la clé client */
     if (errno==EINTR)

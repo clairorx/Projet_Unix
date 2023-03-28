@@ -7,6 +7,7 @@
 
 static void end(); 
 static int Msqid;
+static int Shmid;
 static int CleClient;
 int main(){
 	printf("Test Client\n");
@@ -15,6 +16,7 @@ int main(){
 
 	ConnectServeur(Msqid, &CleClient);
 	printf("Cle client = %d\n", CleClient);
+
 	return 0;
 }
 
