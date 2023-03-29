@@ -26,3 +26,4 @@
 #include "CL_connect.h"
 #include "CL_mem.h"
 #include "CL_data.h"
+#include "CL_sem.h"

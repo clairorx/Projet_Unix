@@ -1,5 +1,8 @@
-/* Fichier CV_connect.c  */
-
+/**********************************************************
+*						  	  *
+*		     Fichier CL_connect.c                 *
+*							  *
+**********************************************************/
 
 #include "CL_include"
 
@@ -11,16 +14,15 @@ signal(SIGALRM,AlarmeTimeout);
 alarm(n);
 }
 
-/**********************************************
-*	ENREGISTREMENT DES ARRIVEES ET DEPARTS
-*
-* ENTREE: msqid = identifiant de la messagerie
-*	 : Cptr = pointeur sur la table des PID clients
-*  SORTIE: ce processus doit etre detruit par le processus pere
-*  RETOUR: -1 Si erreur sur msgrcv
-*/
+/**
+ * @brief Connecte le client au serveur
+ * 
+ * @param msqid 
+ * @return key_t 
+ */
 key_t ConnectServeur(int msqid){
 
+    /* */
     dmsgbuf message;
     int erreur;
     pid_t pid = getpid();
@@ -33,14 +35,19 @@ key_t ConnectServeur(int msqid){
         else
             printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
     }
+
+    /* ENVOI MESSAGE */
     printf("Client:Envoi MESSAGE:%s %ld\n",message.txt,message.type);
     message.type = pid;
+
+    /* RECEPTION MESSAGE PID _ CLE CLIENT */
     if ((erreur=msgrcv(msqid,&message,L_MSG,message.type,0)) <0){ /* Reception d'un message de type PID contenant la clé client */
         if (errno==EINTR)
             erreur=0;
         else
             printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
     }
+    /* RECEPTION MESSAGE */
     printf("Client:reception message clé client:%s %ld\n",message.txt,message.type);
     key_t CleClient = ftok(message.txt,C_Shm); /* */
     sprintf(message.txt,"%d",pid); /* Envoi un message de type CONNECT contenant le PID du client*/
@@ -51,10 +58,18 @@ key_t ConnectServeur(int msqid){
         else
             printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
     }
+
+    /* ENVOI ACKNOLEDGE */
     printf("Client:Acknoledge envoyé :%s %ld\n",message.txt,message.type);
     return CleClient;
+    
 }/* fin procedure */
 
+/**
+ * @brief Deconnecte le client du serveur
+ * 
+ * @param msqid 
+ */
 void DeconnectServeur(int msqid){
     dmsgbuf message;
     int erreur;
