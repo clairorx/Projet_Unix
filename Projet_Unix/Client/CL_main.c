@@ -10,6 +10,7 @@ static int Msqid;
 static int Shmid;
 static key_t CleClient;
 void Handler_sig_memory(int); 
+void* lecteur_task(int voie);
 BUF *MemBuf;
 
 /**
@@ -26,7 +27,14 @@ int main(int argc, char *argv[]){
 	/* GESTION DES SIGNAUX USR */
 	signal(SIGUSR1, Handler_sig_memory);
 	signal(SIGUSR2, Handler_sig_memory);
-
+	
+	pthread_t thread_lecteur0;
+	pthread_create(&thread_lecteur0, NULL, lecteur_task, 0);
+	
+	pthread_t thread_lecteur1;
+	pthread_create(&thread_lecteur1, NULL, lecteur_task, 1);
+	
+	
 	int nbdata=atoi(argv[1]);
   		if (nbdata <= 0){
       	printf("Erreur dans la valeur du parametre de sv_zz\n");
@@ -53,7 +61,13 @@ int main(int argc, char *argv[]){
 		pause(); /* on attend un signal */
 		i++;
 	}
+	pthread_join(thread_lecteur0, NULL); /* Attente de terminaison du thread */
+	pthread_join(thread_lecteur1, NULL); /* Attente de terminaison du thread */
 	return 0;
+}
+void* lecteur_task(int voie){
+	main_lecteur(voie);
+	pthread_exit(NULL);
 }
 
 /**
