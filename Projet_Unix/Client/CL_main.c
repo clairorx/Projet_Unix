@@ -8,6 +8,7 @@
 static void end(); 
 static int Msqid;
 static int Shmid;
+static int Semid_lecteurs;
 static key_t CleClient;
 void Handler_sig_memory(int); 
 void* lecteur_task(int voie);
@@ -28,6 +29,8 @@ int main(int argc, char *argv[]){
 	signal(SIGUSR1, Handler_sig_memory);
 	signal(SIGUSR2, Handler_sig_memory);
 	
+	Semid_lecteurs = Sem_create();
+	
 	pthread_t thread_lecteur0;
 	pthread_create(&thread_lecteur0, NULL, lecteur_task, 0);
 	
@@ -36,7 +39,7 @@ int main(int argc, char *argv[]){
 	
 	
 	int nbdata=atoi(argv[1]);
-  		if (nbdata <= 0){
+  	if (nbdata <= 0){
       	printf("Erreur dans la valeur du parametre de sv_zz\n");
      	exit(0);
     }
@@ -61,12 +64,13 @@ int main(int argc, char *argv[]){
 		pause(); /* on attend un signal */
 		i++;
 	}
-	pthread_join(thread_lecteur0, NULL); /* Attente de terminaison du thread */
-	pthread_join(thread_lecteur1, NULL); /* Attente de terminaison du thread */
+	sleep(0.2);
+	kill(thread_lecteur0, SIGKILL); /* kill lecteur */
+	kill(thread_lecteur1, SIGKILL); /* kill lecteur */
 	return 0;
 }
 void* lecteur_task(int voie){
-	main_lecteur(voie);
+	main_lecteur(voie, Semid_lecteurs, &MemBuf);
 	pthread_exit(NULL);
 }
 
@@ -77,12 +81,14 @@ void* lecteur_task(int voie){
  */
 void Handler_sig_memory(int sig){
 	if(sig==SIGUSR1){
-		printf("Signal SIGUSR1 recu\n"); 
-		read_data(0, &MemBuf);
+		printf("Signal SIGUSR1 recu\n");
+		printf("pere libere ressource lecteur voie %d\n",0);
+		V(Semid_lecteurs,0);
 	}
 	if(sig==SIGUSR2){
-		printf("Signal SIGUSR2 recu\n"); 
-		read_data(1, &MemBuf);
+		printf("Signal SIGUSR2 recu\n");
+		printf("pere libere ressource lecteur voie %d\n",1);
+		V(Semid_lecteurs,1);
 	}
 }
 

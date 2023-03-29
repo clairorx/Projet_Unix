@@ -46,7 +46,7 @@ void Sem_destroy(SEMAPHORE sem){
  * @param NUMSemaphore 
  * @return int 
  */
-int P(SEMAPHORE sem, int val, int voie)
+int P(SEMAPHORE sem, int voie)
 {
     struct sembuf semoper;
     semoper.sem_num = voie;
@@ -69,7 +69,7 @@ int P(SEMAPHORE sem, int val, int voie)
  * @param voie 
  * @return int 
  */
-int V(SEMAPHORE sem, int val, int voie){
+int V(SEMAPHORE sem, int voie){
 
     struct sembuf semoper;
     semoper.sem_num = voie;

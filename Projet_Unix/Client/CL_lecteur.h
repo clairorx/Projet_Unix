@@ -4,4 +4,4 @@
 *							  *
 **********************************************************/
 
-void main_lecteur(int voie);
+void main_lecteur(int voie, int sem, BUF **MemBuf);
