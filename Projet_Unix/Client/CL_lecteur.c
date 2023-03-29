@@ -6,13 +6,9 @@
 
 #include "CL_include"
 
-void main_lecteur(int voie, int sem, BUF **MemBuf){
-	printf("Dans le lecteur de la voie %d\n",voie);
-	while(1){
-		printf("lecteur voie %d demande ressource\n",voie);
+void main_lecteur(int voie, int sem, BUF **MemBuf, int limiteN){
+	while(((*(MemBuf)+0)->n + (*(MemBuf)+1)->n)<limiteN){
 		P(sem,voie);
-		printf("lecteur voie %d ressource obtenue\n",voie);
 		read_data(voie, MemBuf);
 	}
-	
 }
