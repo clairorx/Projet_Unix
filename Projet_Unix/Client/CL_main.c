@@ -1,8 +1,8 @@
-/**********************************************
- * Projet Unix - Client
- * 	
- * Taches 
-*/
+/**********************************************************
+*						  	  *
+*		       			Projet UNIX MAIN 		           *
+*							  *
+**********************************************************/
 #include "CL_include"
 
 static void end(); 
@@ -62,8 +62,14 @@ int main(int argc, char *argv[]){
  * @param sig 
  */
 void Handler_sig_memory(int sig){
-	printf("Signal %d recu\n", sig);
-	read_data(Shmid, &MemBuf);
+	if(sig==SIGUSR1){
+		printf("Signal SIGUSR1 recu\n"); 
+		read_data(0, &MemBuf);
+	}
+	if(sig==SIGUSR2){
+		printf("Signal SIGUSR2 recu\n"); 
+		read_data(1, &MemBuf);
+	}
 }
 
 /**
