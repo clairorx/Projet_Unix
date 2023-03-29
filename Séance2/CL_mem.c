@@ -28,9 +28,9 @@ int id_mem(key_t CleC, int BUF_S) {
 /*Obtention de l'adresse de la memoire partagee*/
 BUF* adr_mem(int shmid) {
 
-	BUF* buffer = NULL;
+	BUF* buffer;
 
-	if ((buffer = (BUF*) shmat(shmid, NULL, 0)) == (void *)-1) {
+	if ((buffer = (BUF*) shmat(shmid, NULL, 0)) == -1) {
 		printf("Erreur lors de l'obtention de l'adresse de la memoire partagee: ");
 		printf("%s\n", strerror(errno));
 		exit(EXIT_FAILURE);

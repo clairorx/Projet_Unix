@@ -1,20 +1,54 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_connect.c                 *
+*		       Fichier CL_msg.c                   *
 *							  *
 **********************************************************/
 
-/* CONNEXION */
+/*IDENTIFICATION DE LA MESSAGERIE PAR LE CLIENT*/
 
 #include "CL_include"
-#include "CL_connect.h"
+#include "CL_msg.h"
+
+
+key_t connect_messagerie(char* CleServ, int Msg) {
+
+  /* Obtention de la cle de messagerie */
+	key_t CleMes;
+
+	if ((CleMes = ftok(CleServ, Msg)) == -1) {
+		printf("Erreur lors de la creation de la cle serveur: ");
+		printf("%s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	else {
+		printf("Clt: Cle de messagerie = %d\n", CleMes);
+	}
+
+	/* Obtention de l'id de la messagerie */
+
+	int id_mes;
+		
+	if ((id_mes = msgget(CleMes, IPC_CREAT)) == -1) {
+		printf("Erreur lors de l'obtention de l'id de la messagerie: ");
+		printf("%s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	else {
+		printf("Clt: ID messagerie = %d\n", id_mes);
+	}
+	return id_mes;
+}
+
+
+/* CONNEXION A LA MESSAGERIE */
+
 
 /*Envoi du message de type CONNECT au seveur*/
 void envoi_connect(int id_mes, int L) {
 
 	dmsgbuf message_connect;
 	message_connect.type = CONNECT;
-	sprintf(message_connect.txt, "%i", getpid());
+	sprintf(message_connect.txt, "%d", getpid());
 	
 	if (msgsnd(id_mes, &message_connect, L, IPC_NOWAIT) == -1) {
 		printf("Erreur lors de l'envoi du MESSAGE %s type CONNECT: ", message_connect.txt);
@@ -71,4 +105,21 @@ void envoi_ack(int id_mes, int L) {
 	}
 	else 
 		printf("Clt: Envoie MESSAGE type ACK\n");
+}
+
+
+/* Deconnexion du client */
+void envoi_deconnect(int id_mes, int L) {
+
+	dmsgbuf message_deco;
+	message_deco.type = DECONNECT;
+	sprintf(message_deco.txt, "%i", getpid());
+	
+	if (msgsnd(id_mes, &message_deco, L, IPC_NOWAIT) == -1) {
+		printf("Erreur lors de l'envoi du message type DECONNECT: ");
+		printf("%s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
+	else 
+		printf("Clt: Envoie MESSAGE type DECONNECT\n");
 }
