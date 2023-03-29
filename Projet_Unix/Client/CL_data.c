@@ -7,6 +7,6 @@
 
 /* */
 void read_data(int voie, BUF **MemBuf){
-    printf("data in MemBuf->tampon[%d] is %d\n", (*(MemBuf+voie))->n, (*(MemBuf+voie))->tampon[(*(MemBuf+voie))->n]);
+    printf("data in MemBuf->tampon[%d] is %d\n", (*(MemBuf)+voie)->n, (*(MemBuf)+voie)->tampon[(*(MemBuf)+voie)->n]);
 
 }
