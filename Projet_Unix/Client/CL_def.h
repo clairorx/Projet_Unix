@@ -42,6 +42,7 @@ typedef struct {
  
 /*-- structure des tampons --*/
 typedef struct {
-   int n;       /* indice tableau derniere donnee ecrite */
+   int n;       /* indice tableau derniere donnee ecrite */ 
+               /* Tableau de 3600 données*/
    int tampon[BUF_SZ];
 }BUF;
