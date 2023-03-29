@@ -21,9 +21,11 @@
 #include <sys/shm.h>
 #include <sys/msg.h>
 #include <sys/sem.h>
+#include <pthread.h>
 #include "CL_def.h"
-#include "CL_msg.h" 
+#include "CL_msg.h"
 #include "CL_connect.h"
 #include "CL_mem.h"
 #include "CL_data.h"
 #include "CL_sem.h"
+#include "CL_lecteur.h"
