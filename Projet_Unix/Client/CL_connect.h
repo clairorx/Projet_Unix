@@ -2,6 +2,6 @@
 ** Fichier    CL_connect.h       **
 ***************************/
 
-void ConnectServeur(int ,int *);
+key_t ConnectServeur(int);
 
 void DeconnectServeur(int);
