@@ -1,5 +1,8 @@
-/* Fichier CV_connect.c  */
-
+/**********************************************************
+*						  	  *
+*		     Fichier CL_connect.c                 *
+*							  *
+**********************************************************/
 
 #include "CL_include"
 
@@ -11,14 +14,12 @@ signal(SIGALRM,AlarmeTimeout);
 alarm(n);
 }
 
-/**********************************************
-*	ENREGISTREMENT DES ARRIVEES ET DEPARTS
-*
-* ENTREE: msqid = identifiant de la messagerie
-*	 : Cptr = pointeur sur la table des PID clients
-*  SORTIE: ce processus doit etre detruit par le processus pere
-*  RETOUR: -1 Si erreur sur msgrcv
-*/
+/**
+ * @brief Connecte le client au serveur
+ * 
+ * @param msqid 
+ * @return key_t 
+ */
 key_t ConnectServeur(int msqid){
 
     dmsgbuf message;
@@ -55,6 +56,11 @@ key_t ConnectServeur(int msqid){
     return CleClient;
 }/* fin procedure */
 
+/**
+ * @brief Deconnecte le client du serveur
+ * 
+ * @param msqid 
+ */
 void DeconnectServeur(int msqid){
     dmsgbuf message;
     int erreur;
