@@ -10,7 +10,7 @@ static int Msqid;
 static int Shmid;
 static int Semid_lecteurs;
 static key_t CleClient;
-pid_t pidPere, pidLecteur0, pidLecteur1;
+pid_t pidPere, pidLecteur0, pidLecteur1,pidRedacteur0,pidRedacteur1;
 void Handler_sig_memory(int); 
 void* lecteur_task(int voie);
 BUF *MemBuf;
@@ -65,14 +65,24 @@ int main(int argc, char *argv[]){
 				i++;
 			}
 		}
-		else{ /* Code du lecteur1 */
-			main_lecteur(0, Semid_lecteurs, &MemBuf, limiteN);
-			exit(0);
+		else{ /* Code du lecteur 1 */
+			if((pidRedacteur1=fork()) != 0){ /* Code du lecteur 1 */
+				main_lecteur(0, Semid_lecteurs, &MemBuf, limiteN);
+				exit(0);
+			}
+			else{ /* Code du Redacteur 1 */
+				
+			}
 		}
 	}
-	else{ /* Code du lecteur1 */
-		main_lecteur(1, Semid_lecteurs, &MemBuf, limiteN);
-		exit(0);
+	else{ /* Code du lecteur 0 */
+		if((pidRedacteur0=fork()) != 0){ /* Code du lecteur 0 */
+				main_lecteur(0, Semid_lecteurs, &MemBuf, limiteN);
+				exit(0);
+			}
+			else{ /* Code du Redacteur 0 */
+				
+			}
 	}
 	waitpid(pidLecteur0,NULL,0);
 	waitpid(pidLecteur1,NULL,0);
