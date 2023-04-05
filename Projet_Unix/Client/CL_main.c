@@ -111,11 +111,11 @@ int main(int argc, char *argv[]){
  */
 void Handler_sig_memory(int sig){
 	if(sig==SIGUSR1){
-		printf("Signal SIGUSR1 recu\n");
+		/*printf("Signal SIGUSR1 recu\n");*/
 		V(Semid_lecteur,0);
 	}
 	if(sig==SIGUSR2){
-		printf("Signal SIGUSR2 recu\n");
+		/*printf("Signal SIGUSR2 recu\n");*/
 		V(Semid_lecteur,1);
 	}
 }

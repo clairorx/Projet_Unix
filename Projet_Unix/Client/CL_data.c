@@ -12,9 +12,11 @@
  * @param MemBuf 
  */
 void read_data(int voie, BUF **MemBuf, int* pfd){
+    time_t now;
+    time(&now);
     char str[100];
     close(pfd[0]);
-    sprintf(str, "%d", ((*(MemBuf)+voie)->tampon[(*(MemBuf)+voie)->n]));
-    printf("Dans read data, data = %s\n", str);
+    sprintf(str, "%d %s", ((*(MemBuf)+voie)->tampon[(*(MemBuf)+voie)->n]),ctime(&now));
+    str[strlen(str)-1] = '\0';
     write(pfd[1], str, sizeof(str));
 }

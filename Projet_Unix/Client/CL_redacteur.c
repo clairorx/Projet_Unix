@@ -19,16 +19,13 @@ void main_redacteur(int voie, int sem_redact, int* pfd, int limiteN){
             /* le redacteur attend la lecture de donnee */
             P(sem_redact, LECTURE);
             read(pfd[0], data[j], sizeof(data[j]));
-            printf("%s\n", data[j]);
             V(sem_redact, ECRITURE);
             i++;
             if(i>=limiteN) break;
         }
         for(k=0; k<j; k++){
-            printf(" Voie n° %d : data n° %d = %s\n",voie, k+i-5, data[k]);
-        }
-    
-   
-
+            printf(" Donnee no %d de la voie %d : %s\n",k+i-5,voie,data[k]);
+        } 
+        printf("\n");
     }
 }
