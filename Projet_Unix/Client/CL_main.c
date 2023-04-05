@@ -10,7 +10,7 @@ static int Msqid;
 static int Shmid;
 static int Semid_lecteurs;
 static key_t CleClient;
-long int pidPere, pidLecteur0, pidLecteur1;
+pid_t pidPere, pidLecteur0, pidLecteur1;
 void Handler_sig_memory(int); 
 void* lecteur_task(int voie);
 BUF *MemBuf;
@@ -52,8 +52,8 @@ int main(int argc, char *argv[]){
 	
 	int limiteN = (MemBuf+0)->n + (MemBuf+1)->n + nbdata - 1;
 	
-	if(pidLecteur0=fork()){ /* Code du pere */
-		if(pidLecteur0=fork()){ /* Code du pere */
+	if((pidLecteur0=fork()) != 0){ /* Code du pere */
+		if((pidLecteur1=fork()) != 0){ /* Code du pere */
 			/* GESTION DES SIGNAUX USR */
 			signal(SIGUSR1, Handler_sig_memory);
 			signal(SIGUSR2, Handler_sig_memory);
@@ -74,8 +74,8 @@ int main(int argc, char *argv[]){
 		main_lecteur(1, Semid_lecteurs, &MemBuf, limiteN);
 		exit(0);
 	}
-	wait(pidLecteur0);
-	wait(pidLecteur1);
+	waitpid(pidLecteur0,NULL,0);
+	waitpid(pidLecteur1,NULL,0);
 	
 	return 0; 
 }
