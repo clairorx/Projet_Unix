@@ -6,7 +6,6 @@
 
 
 #include "CL_include"
-#include "CL_mem.h"
 
 /*************   ALLOCATION D'UN TAMPON DE DONNEES
 *  ENTREE: Ptr = pointeur du pointeur du tampon
