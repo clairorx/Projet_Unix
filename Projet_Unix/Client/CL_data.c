@@ -11,7 +11,10 @@
  * @param voie
  * @param MemBuf 
  */
-void read_data(int voie, BUF **MemBuf){
-    printf("data in MemBuf->tampon[%d] is %d\n", (*(MemBuf)+voie)->n, (*(MemBuf)+voie)->tampon[(*(MemBuf)+voie)->n]);
-
+void read_data(int voie, BUF **MemBuf, int* pfd){
+    char str[100];
+    close(pfd[0]);
+    sprintf(str, "%d", ((*(MemBuf)+voie)->tampon[(*(MemBuf)+voie)->n]));
+    printf("Dans read data, data = %s\n", str);
+    write(pfd[1], str, sizeof(str));
 }

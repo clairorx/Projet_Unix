@@ -14,9 +14,11 @@
  * @param MemBuf 
  * @param limiteN 
  */
-void main_lecteur(int voie, int sem, BUF **MemBuf, int limiteN){
+void main_lecteur(int voie,int sem_redact, int sem_lect, BUF **MemBuf, int limiteN, int* pfd){
 	while(((*(MemBuf)+0)->n + (*(MemBuf)+1)->n)<limiteN){
-		P(sem,voie);
-		read_data(voie, MemBuf);
+		P(sem_lect,voie);
+		P(sem_redact,ECRITURE);
+		read_data(voie, MemBuf, pfd);
+		V(sem_redact,LECTURE);
 	}
 }

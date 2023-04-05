@@ -1,7 +1,9 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_lecteur.c                 *
+*		     Fichier CL_lecteur.h                 *
 *							  *
 **********************************************************/
 
-void main_lecteur(int voie, int sem, BUF **MemBuf, int limiteN);
+#include "CL_def.h"
+
+void main_lecteur(int voie,int sem_redact, int sem_lect, BUF **MemBuf, int limiteN, int* pfd);

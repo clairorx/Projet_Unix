@@ -1,3 +1,5 @@
+#ifndef CL_DEF_H
+#define CL_DEF_H
 /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*
 *	Module CL_def.h				*
 *---------------------------------------------*
@@ -14,6 +16,8 @@
 #define NB_SEM 3		/* NVOIES + 1 */
 #define NCL_MAX  10	/* nombre maximum de clients */
 #define BUF_SZ  3600	/* Taille des buffers d'entree */
+#define ECRITURE        1
+#define LECTURE        0
 
 /*---- Format des messages ------*/
 #define L_MSG  200	/* longueur des messages */
@@ -46,3 +50,5 @@ typedef struct {
                /* Tableau de 3600 données*/
    int tampon[BUF_SZ];
 }BUF;
+
+#endif
