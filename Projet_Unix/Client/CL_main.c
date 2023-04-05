@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
 	signal(SIGTERM, end);
   	signal(SIGINT, end);	
 
-	
+	/* CREATION DES SEMAPHORES */
 	Semid_lecteurs = Sem_create();
 	
 	int nbdata=atoi(argv[1]);
