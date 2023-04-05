@@ -37,7 +37,7 @@ key_t ConnectServeur(int msqid){
     }
 
     /* ENVOI MESSAGE */
-    printf("Client:Envoi MESSAGE:%s %ld\n",message.txt,message.type);
+    /*printf("Client:Envoi MESSAGE:%s %ld\n",message.txt,message.type);*/
     message.type = pid;
 
     /* RECEPTION MESSAGE PID _ CLE CLIENT */
@@ -48,7 +48,7 @@ key_t ConnectServeur(int msqid){
             printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
     }
     /* RECEPTION MESSAGE */
-    printf("Client:reception message clé client:%s %ld\n",message.txt,message.type);
+    /*printf("Client:reception message clé client:%s %ld\n",message.txt,message.type);*/
     key_t CleClient = ftok(message.txt,C_Shm); /* */
     sprintf(message.txt,"%d",pid); /* Envoi un message de type CONNECT contenant le PID du client*/
     message.type = ACK ; /* Acknowledge */
@@ -60,7 +60,7 @@ key_t ConnectServeur(int msqid){
     }
 
     /* ENVOI ACKNOLEDGE */
-    printf("Client:Acknoledge envoyé :%s %ld\n",message.txt,message.type);
+    /*printf("Client:Acknoledge envoyé :%s %ld\n",message.txt,message.type);*/
     return CleClient;
     
 }/* fin procedure */

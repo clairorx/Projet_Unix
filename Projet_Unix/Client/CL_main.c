@@ -49,18 +49,22 @@ int main(int argc, char *argv[]){
     }
 
 	/* CREATION MESSAGERIE */
-	printf("Test Client\n");
+	/*printf("Test Client\n");*/
 	Msqid = CreationMessagerie();
-	printf("msqid = %d\n", Msqid);
+	/*printf("msqid = %d\n", Msqid);*/
 
 	/* CONNEXION SERVEUR */
 	CleClient = ConnectServeur(Msqid); 
-	printf("Cle client = %d\n", CleClient);
-
+	printf("\nCle client = %d\n", CleClient);
+	printf("\n*******************Connectée au serveur*******************\n");
 	/* CREATION SHARED MEMORY */
-	printf("\nObtention de l'ID de la mémoire partagée\n");
+	/*printf("\nObtention de l'ID de la mémoire partagée\n");*/
 	Shmid = CreationSharedMemory(&MemBuf,CleClient);
-	printf("Shmid = %d\n", Shmid);
+	/*printf("Shmid = %d\n", Shmid);*/
+	printf("\nPtr tampon = %p\n", MemBuf);
+	printf("\n");
+
+	printf("\nDebut de reception des données\n\n");
 	
 	int limiteN = (MemBuf+0)->n + (MemBuf+1)->n + nbdata - 1;
 	

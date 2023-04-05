@@ -24,9 +24,11 @@ int main(int argc,char *argv[])
   sprintf(argv[1],"%d",abs(nbdata));
   
   /*  lance le client  */
-  printf("\n******************************************\n");
-  printf("!!! Lancement Client (pendant %s s) !!!\n",argv[1]);
-  printf("******************************************\n");
+  printf("\n* * * * * * * * * * * * * * * * * * * * * * * * * \n");
+  printf(" Projet CLIENT - SERVEUR Unix IESE4 2022-2023\n");
+  printf("* * * * * * * * * * * * * * * * * * * * * * * * * \n");
+  printf("\nLancement du client pendant %s s\n",argv[1]);
+ 
   if (execlp("./cl_zz","./cl_zz",argv[1],(char *)00) == -1)
     {
       printf("Erreur de execlp\n");

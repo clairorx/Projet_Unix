@@ -17,7 +17,7 @@ int CreationMessagerie(){
    if (( key = ftok(CleServeur,C_Msg)) < 0 )
       return CLEerr; 
    msqid = msgget(key,0666|IPC_CREAT);
-   printf("On est dans la création messagerie");
+   /*printf("On est dans la création messagerie");*/
    return msqid;
 }
 
