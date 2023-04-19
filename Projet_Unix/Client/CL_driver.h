@@ -4,5 +4,5 @@
 *							  *
 **********************************************************/
 
-int driver(int pfd_driver[2]); 
+int main_driver(int pfd_driver[2]); 
 

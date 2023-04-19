@@ -9,15 +9,16 @@
 static int Msqid;
 static int Shmid;
 static int Semid_lecteur;
-static int Semid_redacteur;
+static int Semid_driver;
 static int voie_libre; 
 static key_t CleClient;
-pid_t pidPere, pidLecteur0, pidLecteur1,pidRedacteur0,pidRedacteur1;
+pid_t pidPere, pidLecteur0, pidLecteur1,pidRedacteur0,pidRedacteur1,pidDriver;
 void Handler_sig_memory(int); 
 void* lecteur_task(int voie);
 BUF *MemBuf;
 int pfd1[2]; 
 int pfd0[2];
+int pfd_driver[2];
 
 /**
  * @brief Fonction principale du client
@@ -36,10 +37,16 @@ int main(int argc, char *argv[]){
     if (pipe(pfd1) == -1){
         printf("Erreur pipe\n");	
 	}
+
+	/* CREATION DU PIPE DRIVER */
+    if (pipe(pfd_driver) == -1){
+        printf("Erreur pipe\n");	
+	}
 	
 	/* CREATION DES SEMAPHORES */
 	Semid_lecteur = Sem_create();
-	Semid_redacteur = Sem_create();
+	Semid_driver = Sem_create();
+	V(Semid_driver,0);
 
 	int nbdata=atoi(argv[1]);
   	if (nbdata <= 0){
@@ -69,38 +76,43 @@ int main(int argc, char *argv[]){
 	if((pidLecteur0=fork()) != 0){ /* Code du pere */
 		if((pidLecteur1=fork()) != 0){ /* Code du pere */
 			if((pidRedacteur1=fork()) != 0){ /* Code du pere */
-				if((pidRedacteur0=fork()) != 0){
-					/* GESTION DES SIGNAUX */
-					/*signal(SIGTERM, end);
-					signal(SIGINT, end);
-					signal(SIGKILL, end);*/
-			
-					/* GESTION DES SIGNAUX USR */
-					signal(SIGUSR1, Handler_sig_memory);
-					signal(SIGUSR2, Handler_sig_memory);
-					
-					/* BOUCLE */
-					int i=0;
-					while(i<nbdata){
-						pause(); /* on attend un signal */
-						V(Semid_lecteur,voie_libre);
-						i++;
+				if((pidRedacteur0=fork()) != 0){ /* Code du pere */
+					if((pidDriver=fork()) !=0){ /* Code du pere */
+						/* GESTION DES SIGNAUX */
+						/*signal(SIGTERM, end);
+						signal(SIGINT, end);
+						signal(SIGKILL, end);*/
+				
+						/* GESTION DES SIGNAUX USR */
+						signal(SIGUSR1, Handler_sig_memory);
+						signal(SIGUSR2, Handler_sig_memory);
+						
+						/* BOUCLE */
+						int i=0;
+						while(i<nbdata){
+							pause(); /* on attend un signal */
+							V(Semid_lecteur,voie_libre);
+							i++;
+						}
+					}
+					else{ /* Code du driver */
+						main_driver(pfd_driver);
 					}
 				}
 				else{ /* Code du Redacteur 0 */
-					main_redacteur(0, Semid_redacteur, pfd1);
+					main_redacteur(0, Semid_driver, pfd1, pfd_driver);
 				}
 			}
 			else{ /* Code du Redacteur 1 */
-				main_redacteur(1, Semid_redacteur, pfd0);
+				main_redacteur(1, Semid_driver, pfd0, pfd_driver);
 			}
 		}
 		else{ /* Code du lecteur 1 */
-			main_lecteur(1, Semid_redacteur, Semid_lecteur, &MemBuf, pfd0);
+			main_lecteur(1, Semid_driver, Semid_lecteur, &MemBuf, pfd0);
 		}
 	}
 	else{ /* Code du lecteur 0 */
-		main_lecteur(0, Semid_redacteur, Semid_lecteur, &MemBuf, pfd1);
+		main_lecteur(0, Semid_driver, Semid_lecteur, &MemBuf, pfd1);
 	}
 
 	kill(pidLecteur0,SIGKILL);
@@ -115,9 +127,12 @@ int main(int argc, char *argv[]){
 	kill(pidRedacteur1,SIGKILL);
 	waitpid(pidRedacteur1,NULL,0);
 	/*printf("kill redacteur1");*/
+	kill(pidDriver,SIGKILL);
+	waitpid(pidDriver,NULL,0);
+	/*printf("kill Driver");*/
 	
 	Sem_destroy(Semid_lecteur);
-	Sem_destroy(Semid_redacteur);
+	Sem_destroy(Semid_driver);
 	DeconnectServeur(Msqid);
 	printf("\nClient:FIN RelachMsg %d\n", RelacheMessagerie(Msqid));
 	printf("\nClient:FIN Mort du Client \n");
