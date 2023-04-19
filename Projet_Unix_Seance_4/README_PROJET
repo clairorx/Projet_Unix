@@ -1,0 +1,26 @@
+Projet client-serveur IESE4
+Chaumette Festoc Pieau
+
+Le projet client-serveur doit comporter 2 repertoires :
+- le serveur dont le code source vous est donne
+- le client que vous devez ecrire
+
+
+Le serveur
+
+Executer la commande make
+L'appel au serveur se fait en precisant la duree en secondes SV <n>.
+Ex : SV 50
+lance le serveur pendant 50 secondes
+
+
+
+Le client
+Executer la commande make
+On appelle CL en lui donnant le nombre de secondes CL <n> (25s par defaut).
+
+ATTENTION : l'appel au serveur et au client doit se faire dans 2 terminaux differents.
+
+Si le fichier DRIVER.EXE n'existe pas executer ces commandes:
+gcc -c CL_driver.c 
+gcc  CL_Driver.o -o DRIVER.EXE

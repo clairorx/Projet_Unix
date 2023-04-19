@@ -1,8 +1,8 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_redacteur.c  			               *
+*		     Fichier CL_mem.h                     *
 *							  *
 **********************************************************/
 
-/**/
-void main_redacteur(int voie, int sem_redact, int* pfd);
+int CreationSharedMemory(BUF **Ptr, key_t CleClient);
+int RelacheMemoires(int , int );

@@ -1,8 +1,10 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_redacteur.c  			               *
+*		       Fichier CL_msg.h                           *
 *							  *
 **********************************************************/
 
-/**/
-void main_redacteur(int voie, int sem_redact, int* pfd);
+int CreationMessagerie(void);
+int RelacheMessagerie(int msqid);
+
+

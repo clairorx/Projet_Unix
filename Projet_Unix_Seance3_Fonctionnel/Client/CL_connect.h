@@ -1,8 +1,9 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_redacteur.c  			               *
+*		       Fichier CL_connect.h                   *
 *							  *
 **********************************************************/
 
-/**/
-void main_redacteur(int voie, int sem_redact, int* pfd);
+key_t ConnectServeur(int);
+
+void DeconnectServeur(int);
