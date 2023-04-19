@@ -5,7 +5,7 @@
 **********************************************************/
 #include "CL_include"
 
-static void end(); 
+/*static void end();*/ 
 static int Msqid;
 static int Shmid;
 static int Semid_lecteur;
@@ -27,19 +27,16 @@ int pfd0[2];
 int main(int argc, char *argv[]){
 	pidPere = getpid();
 
-	/* GESTION DES SIGNAUX */
-	signal(SIGTERM, end);
-	signal(SIGINT, end);
-	signal(SIGKILL, end);
-
 	/* CREATION DU CONDUIT 0 */
-    if (pipe(pfd0) == -1)
+    if (pipe(pfd0) == -1){
         printf("Erreur pipe\n");
-
+	}
+	
 	/* CREATION DU CONDUIT 1 */
-    if (pipe(pfd1) == -1)
+    if (pipe(pfd1) == -1){
         printf("Erreur pipe\n");	
-
+	}
+	
 	/* CREATION DES SEMAPHORES */
 	Semid_lecteur = Sem_create();
 	Semid_redacteur = Sem_create();
@@ -71,41 +68,59 @@ int main(int argc, char *argv[]){
 	
 	if((pidLecteur0=fork()) != 0){ /* Code du pere */
 		if((pidLecteur1=fork()) != 0){ /* Code du pere */
-			/* GESTION DES SIGNAUX USR */
-			signal(SIGUSR1, Handler_sig_memory);
-			signal(SIGUSR2, Handler_sig_memory);
+			if((pidRedacteur1=fork()) != 0){ /* Code du pere */
+				if((pidRedacteur0=fork()) != 0){
+					/* GESTION DES SIGNAUX */
+					/*signal(SIGTERM, end);
+					signal(SIGINT, end);
+					signal(SIGKILL, end);*/
 			
-			/* BOUCLE */
-			int i=0;
-			while(i<nbdata){
-				pause(); /* on attend un signal */
-				V(Semid_lecteur,voie_libre);
-				i++;
-			}
-		}
-		else{ /* Code du lecteur 1 */
-			if((pidRedacteur1=fork()) != 0){ /* Code du lecteur 1 */
-				main_lecteur(1, Semid_redacteur, Semid_lecteur, &MemBuf, pfd0);
+					/* GESTION DES SIGNAUX USR */
+					signal(SIGUSR1, Handler_sig_memory);
+					signal(SIGUSR2, Handler_sig_memory);
+					
+					/* BOUCLE */
+					int i=0;
+					while(i<nbdata){
+						pause(); /* on attend un signal */
+						V(Semid_lecteur,voie_libre);
+						i++;
+					}
+				}
+				else{ /* Code du Redacteur 0 */
+					main_redacteur(0, Semid_redacteur, pfd1);
+				}
 			}
 			else{ /* Code du Redacteur 1 */
 				main_redacteur(1, Semid_redacteur, pfd0);
 			}
 		}
+		else{ /* Code du lecteur 1 */
+			main_lecteur(1, Semid_redacteur, Semid_lecteur, &MemBuf, pfd0);
+		}
 	}
 	else{ /* Code du lecteur 0 */
-		if((pidRedacteur0=fork()) != 0){ /* Code du lecteur 0 */
-				main_lecteur(0, Semid_redacteur, Semid_lecteur, &MemBuf, pfd1);
-			}
-			else{ /* Code du Redacteur 0 */
-				main_redacteur(0, Semid_redacteur, pfd1);
-			}
+		main_lecteur(0, Semid_redacteur, Semid_lecteur, &MemBuf, pfd1);
 	}
 
-	printf("Fin"); 
 	kill(pidLecteur0,SIGKILL);
+	waitpid(pidLecteur0,NULL,0);
+	/*printf("kill lecteur0");*/
 	kill(pidLecteur1,SIGKILL);
+	waitpid(pidLecteur1,NULL,0);
+	/*printf("kill lecteur1");*/
 	kill(pidRedacteur0,SIGKILL);
+	waitpid(pidRedacteur0,NULL,0);
+	/*printf("kill redacteur0");*/
 	kill(pidRedacteur1,SIGKILL);
+	waitpid(pidRedacteur1,NULL,0);
+	/*printf("kill redacteur1");*/
+	
+	Sem_destroy(Semid_lecteur);
+	Sem_destroy(Semid_redacteur);
+	DeconnectServeur(Msqid);
+	printf("\nClient:FIN RelachMsg %d\n", RelacheMessagerie(Msqid));
+	printf("\nClient:FIN Mort du Client \n");
 	
 	return 0; 
 }
@@ -130,26 +145,8 @@ void Handler_sig_memory(int sig){
  * @brief Fonction de fin du client
  * 
  */
-static void end() {
-	if(getpid()==pidPere){
-		printf("\nClient:FIN Mort du moniteur \n");
-		DeconnectServeur(Msqid);
-
-		printf("\nClient:FIN RelachMsg %d\n", RelacheMessagerie(Msqid));
-		kill(0,SIGKILL); /* on tue tout le monde */
-	}
-	else if(getpid()==pidLecteur0){
-		printf("\nClient:FIN Fin du lecteur 0\n");
-	}
-	else if(getpid()==pidLecteur1){
-		printf("\nClient:FIN Fin du lecteur 1\n");
-	}
-	else if(getpid()==pidRedacteur0){
-		printf("\nClient:FIN Fin du redacteur 0\n");
-	}
-	else if(getpid()==pidRedacteur1){
-		printf("\nClient:FIN Fin du redacteur 1\n");
-	}
+/*static void end() {
 	
+	kill(0,SIGKILL);  on tue tout le monde 
 }
-
+*/

@@ -73,8 +73,8 @@ key_t ConnectServeur(int msqid){
 void DeconnectServeur(int msqid){
     dmsgbuf message;
     int erreur;
-    erreur=0;
-    while(erreur>=0) {
+    erreur=-1;
+    while(erreur!=0) {
         sprintf(message.txt,"%d",getpid());
         message.type = DECONNECT;
         if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message de type CONNECT contenant le PID du client */
