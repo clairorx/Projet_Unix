@@ -23,7 +23,7 @@ int main(int argc,char *argv[])
     }
   sprintf(argv[1],"%d",abs(nbdata));
   
-  /*  lance le client  */
+  /*  Lancement du client  */
   printf("\n* * * * * * * * * * * * * * * * * * * * * * * * * \n");
   printf(" Projet CLIENT - SERVEUR Unix IESE4 2022-2023\n");
   printf("* * * * * * * * * * * * * * * * * * * * * * * * * \n");

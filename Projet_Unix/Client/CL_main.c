@@ -150,3 +150,4 @@ void Handler_sig_memory(int sig){
 	kill(0,SIGKILL);  on tue tout le monde 
 }
 */
+

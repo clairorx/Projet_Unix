@@ -6,13 +6,21 @@
 
 #include "CL_include"
 
-/**/
-void main_redacteur(int voie, int sem_redact, int* pfd){
+/**
+ * @brief Fonction Redacteur
+ * 
+ * @return int 
+ */
+void main_redacteur(int voie, int sem_redact, int* pfd, int pfd_driver[2]){
+
     char data[5][100];
     close(pfd[1]);
+    close(pfd_driver[0]);
+
     int i=0;
     int j = 0;
     int k = 0;
+
     while(1){
         for(j=0; j<5; j++){
             /* le redacteur attend la lecture de donnee */
@@ -24,4 +32,5 @@ void main_redacteur(int voie, int sem_redact, int* pfd){
         } 
         printf("\n");
     }
+    write(pfd_driver[1], data, sizeof(data));
 }

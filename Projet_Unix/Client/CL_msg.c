@@ -6,11 +6,11 @@
 
 #include "CL_include"
 
-/****************	CREATION DE LA MESSAGERIE
-*  ENTREE: Neant
-*  SORTIE: la messagerie est cree
-*  RETOUR: code erreur <0 ou identifcateur de la messagerie
-*/
+/**
+ * @brief Crée la messagerie
+ * 
+ * @return int 
+ */
 int CreationMessagerie(){
    key_t key;
    int  msqid; /* identificateur de la messagerie */
@@ -22,11 +22,14 @@ int CreationMessagerie(){
 }
 
 
-/*********************	RELACHE LA MESSAGERIE
-*  ENTREE: msqid = identificateur de la messagerie
-*  SORTIE: neant
-*  RETOUR: code erreur -1  ou 0
-*/
+/**
+ * @brief Envoie un message
+ * 
+ * @param msqid 
+ * @param message 
+ * @param type 
+ * @return int 
+ */
 int RelacheMessagerie(int msqid){
    return (msgctl(msqid,IPC_RMID,NULL));
 }

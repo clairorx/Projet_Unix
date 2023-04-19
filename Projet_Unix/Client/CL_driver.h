@@ -1,8 +1,8 @@
 /**********************************************************
 *						  	  *
-*		     Fichier CL_redacteur.c  			               *
+*		     Fichier CL_driver.h                 *
 *							  *
 **********************************************************/
 
+int driver(int pfd_driver[2]); 
 
-void main_redacteur(int voie, int sem_redact, int* pfd, int pfd_driver[2]);
