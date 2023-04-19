@@ -6,4 +6,4 @@
 
 #include "CL_def.h"
 
-void main_lecteur(int voie,int sem_redact, int sem_lect, BUF **MemBuf, int* pfd);
+void main_lecteur(int voie, int sem_lect, BUF **MemBuf, int* pfd);

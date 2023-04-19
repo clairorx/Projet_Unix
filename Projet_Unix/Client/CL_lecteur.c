@@ -14,7 +14,7 @@
  * @param MemBuf 
  * @param limiteN 
  */
-void main_lecteur(int voie,int sem_redact, int sem_lect, BUF **MemBuf, int* pfd){
+void main_lecteur(int voie, int sem_lect, BUF **MemBuf, int* pfd){
     close(pfd[0]);
 	while(1){
 		P(sem_lect,voie);

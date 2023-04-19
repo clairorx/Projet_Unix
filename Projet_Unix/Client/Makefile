@@ -3,7 +3,7 @@
 CC = gcc
 CFLAGS = -g -Wall -ansi -D _GNU_SOURCE 
 CFLAG2 = -c -Wall -ansi -D _GNU_SOURCE 
-OBJETS = CL_main.o CL_msg.o CL_connect.o CL_mem.o CL_data.o CL_sem.o CL_lecteur.o CL_redacteur.o CL_driver.o
+OBJETS = CL_main.o CL_msg.o CL_connect.o CL_mem.o CL_data.o CL_sem.o CL_lecteur.o CL_redacteur.o 
 
 all: cl CL
 
@@ -32,8 +32,6 @@ CL_lecteur.o : CL_lecteur.c CL_include CL_lecteur.h
 CL_redacteur.o : CL_redacteur.c CL_include CL_redacteur.h
 	$(CC) $(CFLAG2) CL_redacteur.c -o CL_redacteur.o
 
-CL_driver.o : CL_driver.c CL_include CL_driver.h
-	$(CC) $(CFLAG2) CL_driver.c -o CL_driver.o
 clean:
 	@rm -f *~ *.o cl_zz CL
 

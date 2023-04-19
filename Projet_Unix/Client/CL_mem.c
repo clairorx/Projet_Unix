@@ -7,11 +7,13 @@
 
 #include "CL_include"
 
-/*************   ALLOCATION D'UN TAMPON DE DONNEES
-*  ENTREE: Ptr = pointeur du pointeur du tampon
-*  SORTIE: le pointeur est renseigne
-*  RETOUR: code erreur <0 ou identificateur de la memoire
-*/
+/**
+ * @brief Fonction qui permet de créer la mémoire partagée
+ * 
+ * @param Ptr 
+ * @param CleClient 
+ * @return int 
+ */
 int CreationSharedMemory(BUF **Ptr, key_t CleClient){
     BUF *MemTamponPtr;
     int CLTshmid;
@@ -25,11 +27,13 @@ int CreationSharedMemory(BUF **Ptr, key_t CleClient){
     return CLTshmid;
 }
 
-/*********************	DESALLOCATION DES TAMPONS
-*  ENTREE: Tshmid,Cshmid = ID des memoires partagee
-*  SORTIE: neant
-*  RETOUR: code erreur <0 ou  0 ;
-*/
+/**
+ * @brief Fonction qui permet de relacher la mémoire partagée
+ * 
+ * @param Tshmid 
+ * @param Cshmid 
+ * @return int 
+ */
 int RelacheMemoires(int Tshmid, int Cshmid){
     int ret = 0;
 

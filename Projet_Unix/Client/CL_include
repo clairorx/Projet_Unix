@@ -30,4 +30,3 @@
 #include "CL_sem.h"
 #include "CL_lecteur.h"
 #include "CL_redacteur.h"
-#include "CL_driver.h"

@@ -15,7 +15,7 @@ SEMAPHORE Sem_create(){
 
     int array[2] = {0,0};
     SEMAPHORE sem; 
-    int nombre_sem = 2; /* Pour libérer la voie 1 ( donc 0 ) ou la voie 2 ( donc 1 )*/
+    int nombre_sem = 2; /* Pour 2 voies */ 
     sem = semget(IPC_PRIVATE, nombre_sem, 0666 | IPC_CREAT);
     if (sem == -1){
         perror("Erreur lors de la creation du semaphore");

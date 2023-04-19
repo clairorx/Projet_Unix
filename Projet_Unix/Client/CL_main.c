@@ -5,7 +5,7 @@
 **********************************************************/
 #include "CL_include"
 
-/*static void end();*/ 
+/* DECLARATION VARIABLES GLOABLES */
 static int Msqid;
 static int Shmid;
 static int Semid_lecteur;
@@ -42,12 +42,13 @@ int main(int argc, char *argv[]){
     if (pipe(pfd_driver) == -1){
         printf("Erreur pipe\n");	
 	}
-	
+
 	/* CREATION DES SEMAPHORES */
 	Semid_lecteur = Sem_create();
 	Semid_driver = Sem_create();
 	V(Semid_driver,0);
 
+	
 	int nbdata=atoi(argv[1]);
   	if (nbdata <= 0){
       	printf("Erreur dans la valeur du parametre de sv_zz\n");
@@ -96,7 +97,12 @@ int main(int argc, char *argv[]){
 						}
 					}
 					else{ /* Code du driver */
-						main_driver(pfd_driver);
+						/* Redirection de l'enteée standard vers le pipe du driver */
+						close(0); 
+						dup(pfd_driver[0]);
+
+						/* Appel du Driver executable */
+						execlp("./Driver", "./Driver", NULL);
 					}
 				}
 				else{ /* Code du Redacteur 0 */
@@ -108,13 +114,14 @@ int main(int argc, char *argv[]){
 			}
 		}
 		else{ /* Code du lecteur 1 */
-			main_lecteur(1, Semid_driver, Semid_lecteur, &MemBuf, pfd0);
+			main_lecteur(1, Semid_lecteur, &MemBuf, pfd0);
 		}
 	}
 	else{ /* Code du lecteur 0 */
-		main_lecteur(0, Semid_driver, Semid_lecteur, &MemBuf, pfd1);
+		main_lecteur(0, Semid_lecteur, &MemBuf, pfd1);
 	}
 
+	/* KILL PROCESSUS FILS */
 	kill(pidLecteur0,SIGKILL);
 	waitpid(pidLecteur0,NULL,0);
 	/*printf("kill lecteur0");*/
@@ -131,11 +138,16 @@ int main(int argc, char *argv[]){
 	waitpid(pidDriver,NULL,0);
 	/*printf("kill Driver");*/
 	
-	Sem_destroy(Semid_lecteur);
-	Sem_destroy(Semid_driver);
+	
+
+	/* DECONNECTION SERVEUR */
 	DeconnectServeur(Msqid);
 	printf("\nClient:FIN RelachMsg %d\n", RelacheMessagerie(Msqid));
 	printf("\nClient:FIN Mort du Client \n");
+	
+	/* DESTRUCTION DES SEMAPHORES */
+	Sem_destroy(Semid_lecteur);
+	Sem_destroy(Semid_driver);
 	
 	return 0; 
 }
@@ -156,13 +168,4 @@ void Handler_sig_memory(int sig){
 	}
 }
 
-/**
- * @brief Fonction de fin du client
- * 
- */
-/*static void end() {
-	
-	kill(0,SIGKILL);  on tue tout le monde 
-}
-*/
 

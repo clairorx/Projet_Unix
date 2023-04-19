@@ -23,7 +23,7 @@ int CreationMessagerie(){
 
 
 /**
- * @brief Envoie un message
+ * @brief Relache la messagerie
  * 
  * @param msqid 
  * @param message 

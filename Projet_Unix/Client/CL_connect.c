@@ -22,7 +22,7 @@ alarm(n);
  */
 key_t ConnectServeur(int msqid){
 
-    /* */
+    /* ENVOI CONNECT */
     dmsgbuf message;
     int erreur;
     pid_t pid = getpid();
@@ -36,21 +36,9 @@ key_t ConnectServeur(int msqid){
             printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
     }
 
-    /* ENVOI MESSAGE */
-    message.type = pid;
-
     /* RECEPTION MESSAGE PID _ CLE CLIENT */
+    message.type = pid;
     if ((erreur=msgrcv(msqid,&message,L_MSG,message.type,0)) <0){ /* Reception d'un message de type PID contenant la clé client */
-        if (errno==EINTR)
-            erreur=0;
-        else
-            printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
-    }
-    /* RECEPTION MESSAGE */
-    key_t CleClient = ftok(message.txt,C_Shm); /* */
-    sprintf(message.txt,"%d",pid); /* Envoi un message de type CONNECT contenant le PID du client*/
-    message.type = ACK ; /* Acknowledge */
-    if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message de type CONNECT contenant le PID du client */
         if (errno==EINTR)
             erreur=0;
         else
@@ -58,6 +46,15 @@ key_t ConnectServeur(int msqid){
     }
 
     /* ENVOI ACKNOLEDGE */
+    key_t CleClient = ftok(message.txt,C_Shm); /* */
+    sprintf(message.txt,"%d",pid);
+    message.type = ACK ; /* Acknowledge */
+    if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message de type ACKNOLEDGE contenant le PID du client */
+        if (errno==EINTR)
+            erreur=0;
+        else
+            printf("Client:Erreur %d EnvoiMessage:%s %ld\n",errno,message.txt,message.type);
+    }
     return CleClient;
     
 }/* fin procedure */
@@ -74,7 +71,7 @@ void DeconnectServeur(int msqid){
     while(erreur!=0) {
         sprintf(message.txt,"%d",getpid());
         message.type = DECONNECT;
-        if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message de type CONNECT contenant le PID du client */
+        if ((erreur=msgsnd(msqid,&message,L_MSG,message.type)) <0){ /* Envoi un message de type DECONNECT contenant le PID du client */
             if (errno==EINTR)
             erreur=0;
             else
